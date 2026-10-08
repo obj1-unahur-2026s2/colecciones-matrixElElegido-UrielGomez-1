@@ -1,9 +1,74 @@
+import matrix.*
 
+describe "Nave de Matrix" {
 
-describe "group of tests " {
+  test "la nave empieza con tres pasajeros" {
+    assert.equals(3, nave.cantidadPasajeros())
+  }
 
-  test "test 01" {
-    assert.equals(100, 50+50)
+  test "Neo es el elegido y esta en la nave" {
+    assert.equals(true, neo.esElElegido())
+    assert.equals(true, nave.elElegidoEstaEnLaNave())
+  }
+
+  test "el pasajero con mayor vitalidad es Neo" {
+    assert.equals(neo, nave.pasajeroConMayorVitalidad())
+  }
+
+  test "la vitalidad de la nave inicialmente no esta equilibrada" {
+    assert.equals(false, nave.vitalidadEquilibrada())
+  }
+
+  test "la nave puede bajar y volver a subir un pasajero" {
+    nave.bajarPasajero(trinity)
+    assert.equals(2, nave.cantidadPasajeros())
+
+    nave.subirPasajero(trinity)
+    assert.equals(3, nave.cantidadPasajeros())
+  }
+
+  test "la nave esta equilibrada cuando no hay pasajeros con vitalidad cero" {
+    nave.bajarPasajero(trinity)
+
+    assert.equals(true, nave.vitalidadEquilibrada())
+
+    nave.subirPasajero(trinity)
+  }
+
+  test "la nave identifica a los pasajeros que no son el elegido" {
+    assert.equals(2, nave.pasajerosQueNoSonElElegido().size())
+    assert.equals(true, nave.pasajerosQueNoSonElElegido().contains(morfeo))
+    assert.equals(true, nave.pasajerosQueNoSonElElegido().contains(trinity))
+    assert.equals(false, nave.pasajerosQueNoSonElElegido().contains(neo))
+  }
+
+  test "Morfeo pierde un punto de vitalidad cada vez que salta" {
+    morfeo.cambiarVitalidad(8)
+
+    morfeo.saltar()
+    morfeo.saltar()
+
+    assert.equals(6, morfeo.vitalidad())
+
+    morfeo.cambiarVitalidad(8)
+  }
+
+  test "al acelerar solo saltan los pasajeros que no son el elegido" {
+    nave.acelerar()
+
+    assert.equals(7, morfeo.vitalidad())
+    assert.equals(0, trinity.vitalidad())
+    assert.equals(10, neo.vitalidad())
+
+    morfeo.cambiarVitalidad(8)
+  }
+
+  test "al chocar todos saltan y abandonan la nave" {
+    nave.chocar()
+
+    assert.equals(0, nave.cantidadPasajeros())
+    assert.equals(5, neo.vitalidad())
+    assert.equals(7, morfeo.vitalidad())
   }
 
 }
